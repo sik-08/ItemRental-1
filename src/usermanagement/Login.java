@@ -5,14 +5,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Login extends JFrame implements ActionListener {
 
     private JLabel userLabel, passwordLabel, messageLabel;
     private JTextField userTextField;
     private JPasswordField passwordField;
-    private JButton loginButton, resetButton;
+    private JButton loginButton, resetButton, signUpButton;
     private JPanel idPanel, pwPanel, loginPanel, messagePanel, btnPanel;
+
+    // 회원가입한 User 삽입 예정. -> .txt 파일로 관리
+    private ArrayList<User> userList = new ArrayList<>();
+
+    // 삭제 예정
     private static final int[] idList = { 1000000, 2000000, 3000000 };
 
 
@@ -31,6 +37,7 @@ public class Login extends JFrame implements ActionListener {
 
         loginButton = new JButton("로그인");
         resetButton = new JButton("초기화");
+        signUpButton = new JButton("회원가입");
 
         idPanel = new JPanel();
         idPanel.add(userLabel);
@@ -58,8 +65,10 @@ public class Login extends JFrame implements ActionListener {
         btnPanel = new JPanel();
         btnPanel.add(loginButton);
         btnPanel.add(resetButton);
+        btnPanel.add(signUpButton);
         loginButton.setPreferredSize(new Dimension(100, 30));
         resetButton.setPreferredSize(new Dimension(100, 30));
+        signUpButton.setPreferredSize(new Dimension(100, 30));
 
         add(loginPanel, "North");
         add(messagePanel, "Center");
@@ -67,30 +76,41 @@ public class Login extends JFrame implements ActionListener {
 
         loginButton.addActionListener(this);
         resetButton.addActionListener(this);
+        signUpButton.addActionListener(this);
 
         setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == loginButton) {
+        if (e.getSource() == loginButton)
+        {
             int id = Integer.parseInt(userTextField.getText());
             String password = new String(passwordField.getPassword());
 
-            if (isValidId(idList, id) && password.equals("0000")) {
+            if (isValidId(idList, id) && password.equals("0000"))
+            {
                 messageLabel.setForeground(Color.BLUE);
                 messageLabel.setText("로그인 성공");
                 dispose();
                 new SystemMain(id, password);
-            } else {
+            }
+            else
+            {
                 JOptionPane.showMessageDialog(null, "잘못된 ID 값입니다.", "에러", JOptionPane.ERROR_MESSAGE);
                 messageLabel.setForeground(Color.RED);
                 messageLabel.setText("다시 시도하세요.");
             }
-        } else {
+        }
+        else if(e.getSource() == resetButton)
+        {
             userTextField.setText("");
             passwordField.setText("");
             messageLabel.setText("");
+        }
+        else if(e.getSource() == signUpButton)
+        {
+            new Join();
         }
     }
 
